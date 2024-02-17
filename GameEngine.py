@@ -7,6 +7,8 @@ import random
 import pickle as pkl
 
 from Veggie import Veggie
+from Captain import Captain
+from Rabit import Rabit
 
 
 
@@ -63,9 +65,38 @@ class GameEngine:
                 if not self._field[y][x]:
                     self._field[y][x] = random.choice(self._veggies)
                     occupied = False
-    
+
+    def initCaptain(self):
+        # Initialize a random position of the captain 'V' to begin the game with.
+        occupied = True
+        while occupied:
+            x = random.randint(0, self._width - 1)
+            y = random.randint(0, self._height - 1)
+            if self._field[y][x] is None:
+                self._captain = Captain(x,y)
+                self._field[y][x] = self._captain
+                occupied = False
+
+    def initRabits(self):
+        # We initially have 5 rabits and we position them anywhere inside the field to roam and eat
+        # our veggies which captain needs to protect
+
+        for _ in range(self.__NUMBER_RABITS):
+            occupied = True
+            while occupied:
+                x = random.randint(0,self._width - 1)
+                y = random.randint(0,self._height - 1)
+                if self._field[y][x] is None:
+                    rabit = Rabit(x,y)
+                    self._rabits.append(rabit)
+                    self._field[y][x] = rabit
+                    occupied = False
+
+
     def initializeGame(self):
         self.initVeggies()
+        self.initCaptain()
+        self.initRabits()
 
     def printField(self):
         # Print the borders and veggies at random positions
