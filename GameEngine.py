@@ -29,6 +29,20 @@ class GameEngine:
         self._score = 0
         self._width = 10
         self._height = 10
+
+    def introduction(self):
+        # Let's state the rules and other features of the game at the beginning of the game
+
+        print("Veggie Heist Welcomes you!!!!")
+        print("The rabits have invaded over your farm \nyou are "
+              "required to save as many veggies as possible to \n have the high score"
+              "Each veggie has the points listed below. \n Play to get highscore!!!!")
+        print("Veggies have points as follows: ")
+        for veggie in self._veggies:
+            print(veggie)
+        print("R represents rabbits and you are the captain V.")
+        print("Let's Start")
+
     
     def initVeggies(self):
         # Initialize a dictionary with value of field size and the points
@@ -112,6 +126,104 @@ class GameEngine:
             print("#")
         print("#" * (self._width * 2 + 2))
 
+    def movCapVert(self, dir):
+        x = self._captain.get_x()
+        y = self._captain.get_y() + dir
+
+        # check if the new direction is in the frame or not
+        if 0<= y < self._height:
+            # check if there is any veggie at new position
+            if isinstance(self._field[y][x],Veggie):
+                veggie = self._field[y][x]
+                print(f"Wow you got a {veggie.get_name()}")
+
+                #adding the veggie to veggie list
+                self._captain.add_veggies(veggie)
+
+                # update the score
+                self._score+= veggie.get_points()
+                self._field[self._captain.get_y()][x] = None
+
+                # giving captain a new position
+                self._captain.set_y(y)
+                self._field[y][x] = self._captain
+            # if there are no veggies on location
+            elif not self._field[y][x]:
+                self._field[self._captain.get_y()][x] = None
+                self._captain.set_y(y)
+                self._field[y][x] = self._captain
+            
+            else:
+                print("Don't step on bunnies please!! They too have feelings")
+        
+        else:
+            print(" OOooops!!  Invalid move!!")
+
+    def movCapHoriz(self, dir):
+        x = self._captain.get_x() + dir
+        y = self._captain.get_y()
+
+        # check if the new direction is in the frame or not
+        if 0<= x < len(self._field[0]):
+            # check if there is any veggie at new position
+            if isinstance(self._field[y][x],Veggie):
+                veggie = self._field[y][x]
+                print(f"Wow you got a {veggie.get_name()}")
+
+                #adding the veggie to veggie list
+                self._captain.add_veggies(veggie)
+
+                # update the score
+                self._score+= veggie.get_points()
+                self._field[self._captain.get_y()][self._captain.get_x()] = None
+
+                # giving captain a new position
+                self._captain.set_x(x)
+                self._field[y][x] = self._captain
+            # if there are no veggies on location
+            elif not self._field[y][x]:
+                self._field[self._captain.get_y()][self._captain.get_x()] = None
+                self._captain.set_x(x)
+                self._field[y][x] = self._captain
+            
+            else:
+                print("Don't step on bunnies please!! They too have feelings")
+        
+        else:
+            print(" OOooops!!  Invalid move!!")
+            
+
+    def moveCaptain(self):
+        # Accept user input and move the captain accordingly.
+        # ASDW keys having the same as left down right and up
+
+        keypress = input('[W]Up [S]Down [A]Left [D]Right: ').upper()
+
+        if keypress == 'W': # up move
+            # logic to move up
+            self.movCapVert(-1)
+        elif keypress == 'S': #down move
+            self.movCapVert(1)
+        elif keypress == 'A': # left move
+            self.movCapHoriz(-1)
+        elif keypress == 'D': # right move
+            self.movCapHoriz(1)
+
+        else:
+            print(f"{keypress} is an invalid selection")
+
+    def remainingVeggies(self):
+        cnt = 0
+        for row in self._field:
+            for item in row:
+                if isinstance(item, Veggie):
+                    cnt+=1
+        
+        return cnt
+
+    def getScore(self):
+        # return current score
+        return self._score
 
 
         
