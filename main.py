@@ -12,11 +12,15 @@ def main():
     while rem_veggies >0:
 
         print(f"Current Score: {game.getScore()}")
+        print(f"Veggies remaining: {rem_veggies}")
         
         game.printField()
         game.moveCaptain()
 
         rem_veggies = game.remainingVeggies()
+
+    game.gameover()
+    game.highscore()
 
 
 

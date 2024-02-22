@@ -225,6 +225,59 @@ class GameEngine:
         # return current score
         return self._score
 
+    def gameover(self):
+        # Defines when game is over i.e. All the veggies on the field gets over.
+
+        print("Well played. Game over!")
+        print(f"Congratulations on collecting {len(self._captain.get_basket())} veggies.")
+        veggie_dict = {}
+        for veggie in self._captain.get_basket():
+            v = veggie.get_name()
+            if v in veggie_dict.keys():
+                veggie_dict[v] +=1
+            else:
+                veggie_dict[v] = 1
+
+        for lines in veggie_dict.keys():
+            print(f"You secured {veggie_dict[lines]} {lines}")
+                  
+
+
+
+        print(f"Your score is {self.getScore()}")
+
+    # write the highscore with initials in the database
+    def highscore(self):
+        prev_scores = []
+        
+        try:
+            with open(self.__HIGHSCORE_FILE,"rb") as f:
+                prev_scores = pkl.load(f)
+        except Exception as e:
+            pass
+
+        name = input("Input your name (upto 7 letters) to put on the leaderboard: ")[:7]
+        # enter max upto 7 lettered words in the leaderboard
+
+        score = (name.upper() , self.getScore())
+        # save the scores in tuple
+
+        prev_scores.append(score)
+
+        prev_scores.sort(key=lambda x: x[1], reverse=True)
+
+        leaderboard = input('Wanna see the leaderboard? y/n?: ')
+
+        if leaderboard.lower() == 'y':
+            print("Name     Score")
+            for vals in prev_scores:
+                print(f"{vals[0]:<5}   {vals[1]:>5}")
+
+        with open(self.__HIGHSCORE_FILE, "wb") as file:
+            pkl.dump(prev_scores, file)
+
+
+
 
         
 
