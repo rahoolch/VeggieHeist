@@ -224,6 +224,30 @@ class GameEngine:
     def getScore(self):
         # return current score
         return self._score
+    
+    def moveRabbits(self):
+        for rabit in self._rabits:
+            #Rabbits random movement
+            move_x = random.choice([-1, 0, 1])
+            move_y = random.choice([-1, 0, 1])
+            x = rabit.get_x() + move_x
+            y = rabit.get_y() + move_y
+
+            if 0 <= x < len(self._field[0]) and 0 <= y < len(self._field):
+                #If location occupied by vegetable and rabbit moves in that location, rabbit will take that position
+                if isinstance(self._field[y][x], Veggie):
+                    self._field[rabit.get_y()][rabit.get_x()] = None
+                    rabit.set_x(x)
+                    rabit.set_y(y)
+                    self._field[y][x] = rabit
+                    print("Hurryyy! A rabbit ate a veggie! :( ")
+
+                elif not self._field[y][x]:
+                    # If location is empty and rabbit moves in tht location, rabbit will take that position
+                    self._field[rabit.get_y()][rabit.get_x()] = None
+                    rabit.set_x(x)
+                    rabit.set_y(y)
+                    self._field[y][x] = rabit
 
     def gameover(self):
         # Defines when game is over i.e. All the veggies on the field gets over.

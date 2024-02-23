@@ -16,6 +16,7 @@ def main():
         
         game.printField()
         game.moveCaptain()
+        game.moveRabbits()
 
         rem_veggies = game.remainingVeggies()
 
